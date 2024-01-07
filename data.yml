@@ -1,0 +1,15 @@
+url: "https://example.com/api/data"
+queryParameters:
+  sort: "name"
+  limit: 10
+headers:
+  Authorization: "Bearer YourAuthToken"
+  Content-Type: "application/json"
+timeout: 3000
+sslVerification: true
+proxy:
+  url: "http://yourproxy.com"
+  username: "proxyuser"
+  password: "proxypass"
+followRedirects: true
+userAgent: "YourAppName/1.0"
