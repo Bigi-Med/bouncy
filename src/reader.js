@@ -1,7 +1,7 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 
-function readFile(filePath) {
+ function readFile(filePath) {
   try {
     const fileContent = fs.readFileSync(filePath, 'utf8');
     if (filePath.endsWith('.json')) {
@@ -16,9 +16,4 @@ function readFile(filePath) {
     return null;
   }
 }
-
-const jsonData = readFile('data.json');
-console.log('JSON Data:', jsonData);
-
-const yamlData = readFile('data.yml');
-console.log('YAML Data:', yamlData);
+ module.exports = readFile

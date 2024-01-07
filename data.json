@@ -1,5 +1,5 @@
 {
-  "url": "https://example.com/api/data",
+  "url": "http://localhost:8080",
   "queryParameters": {
     "sort": "name",
     "limit": 10
