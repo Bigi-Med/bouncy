@@ -32,6 +32,10 @@ const request = http.request(options, (res)=> {
       }
     });
   })
+request.setTimeout(queryData.timeout,() => {
+  request.abort();
+  console.log("Request timed out")
+})
 request.on("error", (err)=> console.log(`Problem with the request : ${err.message}`))
 request.end()
 
