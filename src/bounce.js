@@ -6,16 +6,33 @@ const queryData = readFile('data.json')
 
 const queryParams = queryData['queryParameters']
 const url = queryData['url'] + '?' + queryString.stringify(queryParams)
+const parsedUrl = new URL(url)
 const method = queryData['method']
+const headers = queryData['header']
 
-http.get(url,(res)=> {
-  let data = ''
+const options = {
+  hostname :parsedUrl.hostname,
+  port: parsedUrl.port,
+  path : parsedUrl.pathname + parsedUrl.search,
+  method : method,
+  headers : headers
+}
 
-  res.on('data',(part)=>{
-    data += part
+const request = http.request(options, (res)=> {
+    let data = '';
+
+    res.on('data',(chunk)=> data+=chunk)
+    res.on('end',()=>{
+      try{
+        const parsedData = JSON.parse(data)
+        console.log(parsedData)
+      } catch (e){
+        console.log("Data was received in a non-JSON format, printing data as it is ....")
+        console.log(data);
+      }
+    });
   })
+request.on("error", (err)=> console.log(`Problem with the request : ${err.message}`))
+request.end()
 
-  res.on('end',()=> console.log(JSON.parse(data)))
-
-}).on("error",(err)=> console.error("Error: "+ err.message))
 
