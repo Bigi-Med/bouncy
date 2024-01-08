@@ -1,8 +1,10 @@
 {
   "url": "http://localhost:8080",
+  "method":"GET",
   "queryParameters": {
     "sort": "name",
-    "limit": 10
+    "limit": 10,
+    "test":"tessst"
   },
   "headers": {
     "Authorization": "Bearer YourAuthToken",

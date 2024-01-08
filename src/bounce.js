@@ -1,8 +1,13 @@
 const readFile = require('./reader.js')
 const http = require('http')
+const queryString = require('querystring')
+//module dependencies
 const queryData = readFile('data.json') 
 
-const url = queryData['url']
+const queryParams = queryData['queryParameters']
+const url = queryData['url'] + '?' + queryString.stringify(queryParams)
+const method = queryData['method']
+
 http.get(url,(res)=> {
   let data = ''
 
