@@ -1,12 +1,13 @@
-url: "https://example.com/api/data"
-queryParameters:
-  sort: "name"
-  limit: 10
+url: "http://localhost:8080/posty"
+method: "POST"
 headers:
   Authorization: "Bearer YourAuthToken"
   Content-Type: "application/json"
 timeout: 3000
 sslVerification: true
+payload:
+  first: "first line"
+  second: "second line"
 proxy:
   url: "http://yourproxy.com"
   username: "proxyuser"

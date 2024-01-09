@@ -2,7 +2,7 @@ const readFile = require('./reader.js')
 const http = require('http')
 const queryString = require('querystring')
 //module dependencies
-const queryData = readFile('data.json') 
+const queryData = readFile('data.yml') 
 
 const queryParams = queryData['queryParameters']
 const url = queryData['url'] + '?' + queryString.stringify(queryParams)
@@ -11,6 +11,7 @@ const method = queryData['method']
 const headers = queryData['headers']
 const MAX_REDIRECTS = queryData['max_redirects']?queryData['max_redirects']:3
 const followRedirects = queryData['followRedirects']?queryData['followRedirects']:false 
+const payload = queryData['payload'];
 
 
 const options = {
@@ -46,7 +47,7 @@ const handleResponse = (res,data,maxRedirects) => {
       headers: {...options.headers}
   }
     console.log(`Redirecting to ${redirectUrl.href}`)
-    apiCall(newOption,maxRedirects-1);
+    apiCall(newOption,maxRedirects-1,payload);
   }else{
 
   try{
@@ -59,23 +60,29 @@ const handleResponse = (res,data,maxRedirects) => {
   }
 }
 
-function apiCall(options,maxRedirects){
+function apiCall(options,maxRedirects,payload){
 
   const request = http.request(options, (res)=> {
     let data = '';
 
     res.on('data',(chunk)=> data+=chunk)
-    res.on('end',()=>handleResponse(res,data,maxRedirects));
+    res.on('end',()=>handleResponse(res,data,maxRedirects,payload));
   })
-request.setTimeout(queryData.timeout,() => {
-  request.abort();
-  console.log("Request timed out")
-})
+  request.setTimeout(queryData.timeout,() => {
+    request.abort();
+    console.log("Request timed out")
+  })
 
-request.on("error", (err)=> console.log(`Problem with the request : ${err.message}`))
+  request.on("error", (err)=> console.log(`Problem with the request : ${err.message}`))
 
-request.end()
+  if (payload && options.method === 'POST') {
+    const payloadString = JSON.stringify(payload);
+    // Set Content-Length header
+    request.setHeader('Content-Length', Buffer.byteLength(payloadString));
+    request.write(payloadString);
+  }
+  request.end()
 }
-apiCall(options,MAX_REDIRECTS)
+apiCall(options,MAX_REDIRECTS,payload)
 
 

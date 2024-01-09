@@ -1,20 +1,15 @@
 {
   "url": "http://localhost:8080",
-  "method":"GET",
-  "queryParameters": {
-    "sort": "name",
-    "limit": 10,
-    "test":"tessst"
-  },
+  "method":"POST",
   "payload": {
     "first":"first line",
-    "second":"second line",
-  }
-    "headers": {
-      "Authorization": "Bearer YourAuthToken",
-      "Content-Type": "application/json"
-    },
-    "timeout": 5000,
-    "followRedirects": false,
-    "max_redirects":2,
-  }
+    "second":"second line"
+  },
+  "headers": {
+    "Authorization": "Bearer YourAuthToken",
+    "Content-Type": "application/json"
+  },
+  "timeout": 5000,
+  "followRedirects": false,
+  "max_redirects":2,
+}
