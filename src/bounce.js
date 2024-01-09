@@ -21,23 +21,44 @@ const options = {
   headers : headers
 }
 
-function handleResponse(res,data){
-    try{
+const handleResponse = (res,data) => {
+  //check if the status code is a redirection, and if a redirection destination is present
+  if([301,302,303,307,308].includes(res.statusCode) && res.headers.location){
+    let redirectUrl = parsedUrl
+    if(res.headers.location.startsWith('http://') || res.headers.location.startsWith('https://') ){
+       redirectUrl = new URL(res.headers.location)
+    } else{
+      redirectUrl.pathname = res.headers.location;
+    }
+    const newOption = {
+      ...options,
+      hostname: redirectUrl.hostname,
+      port: redirectUrl.port,
+      path: redirectUrl.pathname + redirectUrl.search,
+      headers: {...options.headers}
+  }
+    console.log(`Redirecting to ${redirectUrl.href}`)
+    apiCall(newOption,3);
+  }else{
+
+  try{
       const parsedData = JSON.parse(data)
       console.log(parsedData)
     } catch (e){
       console.log("Data was received in a non-JSON format, printing data as it is ....")
       console.log(data);
     }
+  }
 }
 
-const request = http.request(options, (res)=> {
-  let data = '';
+function apiCall(options,maxRedirects){
 
-  res.on('data',(chunk)=> data+=chunk)
-  res.on('end',()=>handleResponse(res,data));
-})
+  const request = http.request(options, (res)=> {
+    let data = '';
 
+    res.on('data',(chunk)=> data+=chunk)
+    res.on('end',()=>handleResponse(res,data));
+  })
 request.setTimeout(queryData.timeout,() => {
   request.abort();
   console.log("Request timed out")
@@ -46,5 +67,7 @@ request.setTimeout(queryData.timeout,() => {
 request.on("error", (err)=> console.log(`Problem with the request : ${err.message}`))
 
 request.end()
+}
+apiCall(options,3)
 
 
