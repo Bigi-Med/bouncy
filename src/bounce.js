@@ -21,9 +21,13 @@ const options = {
   headers : headers
 }
 
-const handleResponse = (res,data) => {
+const handleResponse = (res,data,maxRedirects) => {
   //check if the status code is a redirection, and if a redirection destination is present
   if([301,302,303,307,308].includes(res.statusCode) && res.headers.location){
+    if(maxRedirects === 0){
+      console.error('Too many redirects, you can change max redirects by setting the field max_redirects in the json/yml file')
+      return;
+    }
     let redirectUrl = parsedUrl
     if(res.headers.location.startsWith('http://') || res.headers.location.startsWith('https://') ){
        redirectUrl = new URL(res.headers.location)
@@ -38,7 +42,7 @@ const handleResponse = (res,data) => {
       headers: {...options.headers}
   }
     console.log(`Redirecting to ${redirectUrl.href}`)
-    apiCall(newOption,3);
+    apiCall(newOption,maxRedirects-1);
   }else{
 
   try{
@@ -57,7 +61,7 @@ function apiCall(options,maxRedirects){
     let data = '';
 
     res.on('data',(chunk)=> data+=chunk)
-    res.on('end',()=>handleResponse(res,data));
+    res.on('end',()=>handleResponse(res,data,maxRedirects));
   })
 request.setTimeout(queryData.timeout,() => {
   request.abort();
@@ -68,6 +72,6 @@ request.on("error", (err)=> console.log(`Problem with the request : ${err.messag
 
 request.end()
 }
-apiCall(options,3)
+apiCall(options,MAX_REDIRECTS)
 
 
