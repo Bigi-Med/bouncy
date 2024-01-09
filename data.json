@@ -17,6 +17,7 @@
     "username": "proxyuser",
     "password": "proxypass"
   },
-  "followRedirects": true,
+  "followRedirects": false,
+  "max_redirects":2,
   "userAgent": "YourAppName/1.0"
 }

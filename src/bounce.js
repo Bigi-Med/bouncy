@@ -9,7 +9,7 @@ const url = queryData['url'] + '?' + queryString.stringify(queryParams)
 const parsedUrl = new URL(url)
 const method = queryData['method']
 const headers = queryData['header']
-const MAX_REDIRECTS = queryData['max_redirects']?queryData[max_redirects]:3
+const MAX_REDIRECTS = queryData['max_redirects']?queryData['max_redirects']:3
 const followRedirects = queryData['followRedirects']?queryData['followRedirects']:false 
 
 
@@ -24,6 +24,10 @@ const options = {
 const handleResponse = (res,data,maxRedirects) => {
   //check if the status code is a redirection, and if a redirection destination is present
   if([301,302,303,307,308].includes(res.statusCode) && res.headers.location){
+    if(!followRedirects){
+      console.error('Cannot follow redirects, you can change this by setting the followRedirects field to true in the json/yml file')
+      return;
+    }
     if(maxRedirects === 0){
       console.error('Too many redirects, you can change max redirects by setting the field max_redirects in the json/yml file')
       return;
