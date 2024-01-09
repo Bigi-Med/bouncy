@@ -8,7 +8,7 @@ const queryParams = queryData['queryParameters']
 const url = queryData['url'] + '?' + queryString.stringify(queryParams)
 const parsedUrl = new URL(url)
 const method = queryData['method']
-const headers = queryData['header']
+const headers = queryData['headers']
 const MAX_REDIRECTS = queryData['max_redirects']?queryData['max_redirects']:3
 const followRedirects = queryData['followRedirects']?queryData['followRedirects']:false 
 

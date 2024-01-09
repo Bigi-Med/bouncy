@@ -6,18 +6,15 @@
     "limit": 10,
     "test":"tessst"
   },
-  "headers": {
-    "Authorization": "Bearer YourAuthToken",
-    "Content-Type": "application/json"
-  },
-  "timeout": 5000,
-  "sslVerification": true,
-  "proxy": {
-    "url": "http://yourproxy.com",
-    "username": "proxyuser",
-    "password": "proxypass"
-  },
-  "followRedirects": false,
-  "max_redirects":2,
-  "userAgent": "YourAppName/1.0"
-}
+  "payload": {
+    "first":"first line",
+    "second":"second line",
+  }
+    "headers": {
+      "Authorization": "Bearer YourAuthToken",
+      "Content-Type": "application/json"
+    },
+    "timeout": 5000,
+    "followRedirects": false,
+    "max_redirects":2,
+  }
