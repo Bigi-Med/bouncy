@@ -2,7 +2,8 @@ const readFile = require('./reader.js')
 const http = require('http')
 const queryString = require('querystring')
 //module dependencies
-const queryData = readFile('data.yml') 
+const filePath = process.argv[2]
+const queryData = readFile(filePath) 
 
 const queryParams = queryData['queryParameters']
 const url = queryData['url'] + '?' + queryString.stringify(queryParams)
