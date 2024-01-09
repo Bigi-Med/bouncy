@@ -58,9 +58,11 @@ const handleResponse = (res,data,maxRedirects) => {
   try{
       const parsedData = JSON.parse(data)
       console.log(parsedData)
+      console.log(res.headers)
     } catch (e){
       console.log("Data was received in a non-JSON format, printing data as it is ....")
-      console.log(data);
+      console.log(data)
+      console.log(res.headers)
     }
   }
 }
@@ -75,7 +77,7 @@ function apiCall(options,maxRedirects,payload){
   })
   request.setTimeout(queryData.timeout,() => {
     request.abort();
-    console.log("Request timed out")
+    console.error("Request timed out")
   })
 
   request.on("error", (err)=> console.log(`Problem with the request : ${err.message}`))
@@ -89,5 +91,4 @@ function apiCall(options,maxRedirects,payload){
   request.end()
 }
 apiCall(options,MAX_REDIRECTS,payload)
-
 
