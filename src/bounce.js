@@ -2,6 +2,10 @@ const readFile = require('./reader.js')
 const http = require('http')
 const queryString = require('querystring')
 //module dependencies
+if(!process.argv[2]){
+  console.error("Please provide an input file in the JSON or YML format")
+  process.exit(1)
+}
 const filePath = process.argv[2]
 const queryData = readFile(filePath) 
 
